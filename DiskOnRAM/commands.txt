@@ -1,0 +1,15 @@
+insmod dor.ko 
+ls -l /dev/rb*
+dd if=/dev/rb of=dor
+ls -l dor
+dd if=/dev/zero of=/dev/rb1 count=1
+cat > /dev/rb1
+xxd /dev/rb1 | less
+fdisk -l /dev/rb
+mkfs.vfat /dev/rb3
+mount -t vfat /dev/rb3 /mnt/
+df
+umount /mnt/
+rmmod dor
+dmesg
+

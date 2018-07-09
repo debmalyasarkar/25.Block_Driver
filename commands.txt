@@ -1,0 +1,41 @@
+/* All commands should be executed with root privileges */
+/* Load the module */
+insmod ramdisk_blkdrv.ko 
+/* Check if the device is created */
+ls -l /dev/sbd0
+/* Copy contents of device to a temporary file called log */
+dd if=/dev/sbd0 of=log
+/* Check if the log file is created */
+ls -l log
+/* Zero the entire memory region of the device */
+dd if=/dev/zero of=/dev/sbd0 count=1
+
+/* Following Commands are for Raw Access to the ramdisk device */
+/* Write a message directly */
+/* After writing press Enter Key Followed by CTRL+D to exit cat */
+cat > /dev/sbd0
+/* See the contents which are written directly to ramdisk device */
+xxd /dev/sbd0 | less
+                      and/or
+/* Following Commands are for the Filesystem Access to the ramdisk device */
+/* See partiion information of the device */
+fdisk -l /dev/sbd0
+/* Format the device to comply with a standard filesystem type */
+/* Can be vfat, ext2, ext3 or any other type */
+mkfs.vfat /dev/sbd0
+/* Mount the device */
+mount -t vfat /dev/sbd0 /mnt/
+/* Create files and folders in the mounted drive and perform read/write */
+cd /mnt/
+touch abc.txt
+mkdir xyz
+touch xyz/pqr.c
+/* Unmount the drive */
+umount /mnt/
+
+
+/* Unload the module */
+rmmod ramdisk_blkdrv.ko
+/* See the kernel log messages for reference */
+dmesg
+
